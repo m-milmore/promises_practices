@@ -3,7 +3,7 @@
  * Please, make sure to read the following files in exercise-info folder before you start:
  * * "07 To-reject-or-to-resolve.md"
  * * "07 Error-handling.md"
-*/
+ */
 
 /**
  * @task
@@ -19,11 +19,15 @@
  *          }
  */
 
-export function parsePromised() {
+export function parsePromised(json) {
   // Your code goes here...
-
+  const promise = new Promise((resolve, reject) => resolve(json));
+  try {
+    return promise.then((data) => JSON.parse(data));
+  } catch (err) {
+    console.log(e.message);
+  }
 }
-
 
 /**
  * @task
@@ -32,9 +36,9 @@ export function parsePromised() {
  * * logs the message property of the error object
  */
 
-export function onReject() {
+export function onReject(errObj) {
   // Your code goes here...
-
+  console.log(errObj.message);
 }
 
 /**
@@ -46,15 +50,18 @@ export function onReject() {
  * * * if the reason has a message property returns the onReject function call with the error passed as an argument if the promise rejects
  * * * else return the reason
  * The handlePromise() function must be exported
- * Example: export const promiseHandler = () => return <your code> 
+ * Example: export const promiseHandler = () => return <your code>
  */
 
-export const handlePromise = () => {
+export const handlePromise = (promise) => {
   // Your code goes here...
-}
-
-
-
+  return promise
+    .then((value) => value)
+    .catch((reason) => {
+      if (Object.hasOwn(reason, "message")) return onReject(reason);
+      return reason;
+    });
+};
 
 // === TEST YOURSELF ===
 // Once you're finished run the test with "npm run test-7"

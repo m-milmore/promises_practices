@@ -5,10 +5,10 @@
  * for the next task. The result4 is already using .race(), so you can't use it for result1, result2 or result3
  */
 
-const promise1 = new Promise((res) => setTimeout(res, 4000, 'RESOLVED AGAIN'));
-const promise2 = Promise.reject('Promise 2 REJECTED');
-const promise3 = Promise.resolve('Promise 3 RESOLVED');
-const promise4 = new Promise((res) => setTimeout(res, 3000, 'RESOLVED AGAIN'));
+const promise1 = new Promise((res) => setTimeout(res, 4000, "RESOLVED AGAIN"));
+const promise2 = Promise.reject("Promise 2 REJECTED");
+const promise3 = Promise.resolve("Promise 3 RESOLVED");
+const promise4 = new Promise((res) => setTimeout(res, 3000, "RESOLVED AGAIN"));
 const promiseArr = [promise1, promise2, promise3, promise4];
 
 /**
@@ -21,7 +21,10 @@ const promiseArr = [promise1, promise2, promise3, promise4];
  * when promiseArr was passed as the argument
  */
 
-export const result1 = val; // Your code here
+export const result1 = Promise.all(promiseArr).catch((reason) => {
+  console.log(reason);
+  return reason;
+});
 
 /**
  * @task
@@ -33,7 +36,10 @@ export const result1 = val; // Your code here
  * when promiseArr was passed as the argument
  */
 
-export const result2 = val; // Your code here
+export const result2 = Promise.any(promiseArr).then((value) => {
+  console.log(value);
+  return value;
+});
 
 /**
  * @task
@@ -45,7 +51,16 @@ export const result2 = val; // Your code here
  * when promiseArr was passed as the argument
  */
 
-export const result3 = val; // Your code here
+export const result3 = Promise.allSettled(promiseArr).then((results) => {
+  const statusArr = [];
+  results.forEach((result) => {
+    console.log(result.status);
+    if (Object.hasOwn(result, "value")) console.log(result.value);
+    else console.log(result.reason);
+    statusArr.push(result);
+  });
+  return statusArr;
+});
 
 /**
  * @task
@@ -56,7 +71,9 @@ export const result3 = val; // Your code here
  * Example: export const newPromiseArr = promiseArr.<method>()...
  */
 
-export const newPromiseArr = val; // Your code here
+export const newPromiseArr = promiseArr.filter(
+  (promise) => promise !== promise3 && promise !== promise2
+);
 
 // Do NOT refactor or update result 4, it's all set to work
 export const result4 = Promise.race(newPromiseArr)
